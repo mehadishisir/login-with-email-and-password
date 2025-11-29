@@ -11,11 +11,16 @@ const Register = () => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log(email, password);
+    const check = e.target.check.checked;
+    console.log(email, password, check);
+    if (!check) {
+      setErrorMessage("You must agree to the terms and conditions.");
+      return;
+    }
 
     // success message
     setSuccess("");
-    e.target.reset();
+    // e.target.reset();
     // clear error message
     setErrorMessage(false);
     // firebase register user
@@ -113,10 +118,16 @@ const Register = () => {
             </button>
           </div>
         </label>
+        <br></br>
+        <label className="label">
+          <input type="checkbox" name="check" className="checkbox" />
+          terms and conditions
+        </label>
 
         <br></br>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         {success && <p className="text-green-500">{success}</p>}
+
         <button className="btn btn-primary mt-4">Register</button>
       </form>
     </div>
