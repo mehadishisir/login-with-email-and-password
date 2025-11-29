@@ -1,18 +1,36 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase.init";
+import { useState } from "react";
 
 const Register = () => {
+  const [errorMessage, setErrorMessage] = useState(false);
+  const [success, setSuccess] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(email, password);
     e.target.reset();
+    // success message
+    setSuccess("");
+    // clear error message
+    setErrorMessage("");
+    // firebase register user
+    const passwordValidation = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$&*]).{8,}$/;
+    if (!passwordValidation.test(password)) {
+      setErrorMessage(
+        "Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character."
+      );
+
+      return;
+    }
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         console.log(user);
+        setSuccess("User Created Successfully");
         // ...
       })
       .catch((error) => {
@@ -80,17 +98,12 @@ const Register = () => {
             required
             placeholder="Password"
             minlength="8"
-            title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
           />
         </label>
-        <p className="validator-hint hidden">
-          Must be more than 8 characters, including
-          <br />
-          At least one number <br />
-          At least one lowercase letter <br />
-          At least one uppercase letter
-        </p>
+
         <br></br>
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+        {success && <p className="text-green-500">{success}</p>}
         <button className="btn btn-primary mt-4">Register</button>
       </form>
     </div>
