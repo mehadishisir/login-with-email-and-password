@@ -1,20 +1,23 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase.init";
 import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
   const [errorMessage, setErrorMessage] = useState(false);
   const [success, setSuccess] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(email, password);
-    e.target.reset();
+
     // success message
     setSuccess("");
+    e.target.reset();
     // clear error message
-    setErrorMessage("");
+    setErrorMessage(false);
     // firebase register user
     const passwordValidation = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$&*]).{8,}$/;
     if (!passwordValidation.test(password)) {
@@ -92,13 +95,23 @@ const Register = () => {
               <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
             </g>
           </svg>
-          <input
-            type="password"
-            name="password"
-            required
-            placeholder="Password"
-            minlength="8"
-          />
+          <div className="flex justify-between ">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              required
+              placeholder="Password"
+              minlength="8"
+            />
+            <button
+              onClick={() => {
+                setShowPassword(!showPassword);
+              }}
+              className="ml-22"
+            >
+              {showPassword ? <FaEye></FaEye> : <FaEyeSlash></FaEyeSlash>}
+            </button>
+          </div>
         </label>
 
         <br></br>
