@@ -1,4 +1,7 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { auth } from "../../firebase.init";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -40,6 +43,10 @@ const Register = () => {
         const user = userCredential.user;
         console.log(user);
         setSuccess("User Created Successfully");
+        //email verification logic here
+        sendEmailVerification(auth.currentUser).then(() => {
+          alert("Verification email sent!");
+        });
         // ...
       })
       .catch((error) => {
@@ -131,7 +138,7 @@ const Register = () => {
 
         <button className="btn btn-primary mt-4">Register</button>
         <p>
-          already have an account? plaease{" "}
+          already have an account? plaease
           <Link className=" text-blue-500 underline" to="/login">
             login
           </Link>
